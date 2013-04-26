@@ -10,8 +10,10 @@ class OnTime < Sinatra::Base
 
     Log = Logger.new('sinatra.log')
     Log.datetime_format = '%Y-%m-%d %H:%M '
+    Log.formatter = proc do |severity, datetime, progname, msg|
+      "#{datetime}: #{msg}\n"
+    end
     Log.level = Logger::DEBUG
-
 
     Mongoid.logger.level = Logger::DEBUG
     Moped.logger.level = Logger::DEBUG
@@ -23,6 +25,7 @@ class OnTime < Sinatra::Base
   end
 
   get '/' do
+    Log.debug 'Loading index view'
     content_type :html
     erb :index
   end
@@ -30,44 +33,15 @@ class OnTime < Sinatra::Base
   get '/flights' do
     limit = params['limit'] || 100
     flights = Flight.limit(limit)
+    Log.debug flights.to_json
     status 200
     flights.to_json
   end
 
   get '/delays' do
     # db.flights.aggregate({ $group: { _id: "$Carrier", avgDelay: { $avg : "$ArrDelayMinutes" }}})
-
-    map = %Q{
-      function() {
-        var flight = this;
-        var value = { delay: flight.ArrDelayMinutes };
-        emit(this.Carrier, value);
-      }
-    }
-
-    reduce = %Q{
-      function(key, values) {
-        var i = 0, len = values.length, total = 0;
-
-        for (i=0; i<len; i++) {
-            var value = values[i];
-        if (isNaN(value.delay)) {
-            continue;
-        }
-        total += parseInt(value.delay);
-        }
-        return { totalDelayMinutes: total, count: values.length };
-      }
-    }
-
-    finalize = %Q{
-      function(key, reducedValue) {
-        return reducedValue.totalDelayMinutes / reducedValue.count;
-      }
-    }
-
-    results = Flight.map_reduce(map, reduce).out(inline: 1).finalize(finalize)
-
-    #db.flights.mapReduce(map, reduce, { finalize: finalize, out: { inline: 1 }, query: { ArrDelayMinutes: {$gt: 5}}})
+    results = Flight.collection.aggregate({ "$group" => { "_id" => "$Carrier", "avgDelay" => { "$avg" => "$ArrDelayMinutes"}}})
+    Log.debug results.to_json
+    results.to_json
   end
 end
