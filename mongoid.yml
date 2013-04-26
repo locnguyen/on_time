@@ -1,0 +1,6 @@
+development:
+  sessions:
+    default:
+      database: ontime_data
+      hosts:
+        - localhost:27017
