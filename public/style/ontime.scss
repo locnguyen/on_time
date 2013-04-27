@@ -4,8 +4,23 @@ H1.page-title {
   font-size: 24px;
 }
 
+H2.endpoint {
+  font-size: 18px;
+}
+
 /* End override */
 
 .ontime-page {
   padding: 0 15px;
+}
+
+.api-page {
+  UL.endpoints {
+    padding: 0;
+    margin: 0;
+
+    LI {
+      list-style: none;
+    }
+  }
 }

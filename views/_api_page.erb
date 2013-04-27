@@ -1,0 +1,32 @@
+<div class="api-page">
+  <h1 class="page-title">REST Resources</h1>
+
+  <ul class="endpoints accordion" id="endpoints-list">
+    <li class="accordion-group">
+      <h2 class="endpoint accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#endpoints-list" href="#flights">
+          <%= @api[:flights] %>
+        </a>
+      </h2>
+
+      <div id="flights" class="accordion-body collapse">
+        <div class="accordion-inner">
+          Get a list of flights
+        </div>
+      </div>
+    </li>
+    <li class="accordion-group">
+      <h2 class="endpoint accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#endpoints-list" href="#delays">
+          <%= @api[:delays] %>
+        </a>
+      </h2>
+
+      <div id="delays" class="accordion-body collapse">
+        <div class="accordion-inner">
+          Get a list of delays
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
