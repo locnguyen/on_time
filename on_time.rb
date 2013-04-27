@@ -38,9 +38,31 @@ class OnTime < Sinatra::Base
     flights.to_json
   end
 
+
   get '/delays' do
     # db.flights.aggregate({ $group: { _id: "$Carrier", avgDelay: { $avg : "$ArrDelayMinutes" }}})
-    results = Flight.collection.aggregate({ "$group" => { "_id" => "$Carrier", "avgDelay" => { "$avg" => "$ArrDelayMinutes"}}})
+
+    airline_codes = params['airlines']
+    dest_codes = params['destinations']
+    origin_codes = params['origins']
+
+    pipeline = []
+
+    if airline_codes
+      pipeline << { "$match" => { "Carrier" => { "$in" => airline_codes.split(',') } }}
+    end
+
+    if dest_codes
+      pipeline << { "$match" => { "Dest" => { "$in" => dest_codes.split(',') } }}
+    end
+
+    if origin_codes
+      pipeline << { "$match" => { "Origin" => { "$in" => origin_codes.split(',') } }}
+    end
+
+    pipeline << { "$group" => { "_id" => "$Carrier", "avg_delay" => { "$avg" => "$ArrDelayMinutes"}}}
+
+    results = Flight.collection.aggregate(pipeline)
     Log.debug results.to_json
     results.to_json
   end
