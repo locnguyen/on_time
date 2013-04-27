@@ -22,7 +22,14 @@ class OnTime < Sinatra::Base
 
   before do
     content_type :json
+    @api = API
   end
+
+  API = {
+    root: '/',
+    flights: '/flights',
+    delays: '/delays'
+  }
 
   get '/' do
     Log.debug 'Loading index view'
