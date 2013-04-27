@@ -2,7 +2,7 @@
   <h1 class="page-title">REST Resources</h1>
 
   <ul class="endpoints accordion" id="endpoints-list">
-    <li class="accordion-group">
+    <li class="accordion-group endpoint">
       <h2 class="endpoint accordion-heading">
         <a class="accordion-toggle" data-toggle="collapse" data-parent="#endpoints-list" href="#flights">
           <%= @api[:flights] %>
@@ -11,11 +11,12 @@
 
       <div id="flights" class="accordion-body collapse">
         <div class="accordion-inner">
-          Get a list of flights
+          <p><span class="label label-info">GET</span> a list of flights<p>
+
         </div>
       </div>
     </li>
-    <li class="accordion-group">
+    <li class="accordion-group endpoint">
       <h2 class="endpoint accordion-heading">
         <a class="accordion-toggle" data-toggle="collapse" data-parent="#endpoints-list" href="#delays">
           <%= @api[:delays] %>
@@ -24,7 +25,14 @@
 
       <div id="delays" class="accordion-body collapse">
         <div class="accordion-inner">
-          Get a list of delays
+          <p><span class="label label-info">GET</span> a list of average delays</p>
+
+          <h3 class="query-params">Query Parameters</h3>
+          <ul>
+            <li>airline</li>
+            <li>destination</li>
+            <li>origin</li>
+          </ul>
         </div>
       </div>
     </li>

@@ -5,6 +5,9 @@ H1.page-title {
 H2.endpoint {
   font-size: 18px; }
 
+H3.query-params {
+  font-size: 14px; }
+
 /* End override */
 .ontime-page {
   padding: 0 15px; }
@@ -12,5 +15,5 @@ H2.endpoint {
 .api-page UL.endpoints {
   padding: 0;
   margin: 0; }
-  .api-page UL.endpoints LI {
+  .api-page UL.endpoints LI.endpoint {
     list-style: none; }

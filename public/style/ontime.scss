@@ -8,6 +8,10 @@ H2.endpoint {
   font-size: 18px;
 }
 
+H3.query-params {
+  font-size: 14px;
+}
+
 /* End override */
 
 .ontime-page {
@@ -19,7 +23,7 @@ H2.endpoint {
     padding: 0;
     margin: 0;
 
-    LI {
+    LI.endpoint {
       list-style: none;
     }
   }
