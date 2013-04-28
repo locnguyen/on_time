@@ -9,6 +9,15 @@ H3.query-params {
   font-size: 14px; }
 
 /* End override */
+#alerts #indicator {
+  width: 50%;
+  margin: 0 auto;
+  display: none; }
+  #alerts #indicator #bar {
+    width: 100%; }
+#alerts #error {
+  display: none; }
+
 .ontime-page {
   padding: 0 15px; }
 

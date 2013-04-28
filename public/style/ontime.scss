@@ -14,6 +14,23 @@ H3.query-params {
 
 /* End override */
 
+#alerts {
+  #indicator {
+    width: 50%;
+    margin: 0 auto;
+    display: none;
+
+    #bar {
+      width: 100%;
+    }
+  }
+
+  #error {
+    display: none;
+  }
+}
+
+
 .ontime-page {
   padding: 0 15px;
 }
