@@ -26,3 +26,14 @@ H3.query-params {
   margin: 0; }
   .api-page UL.endpoints LI.endpoint {
     list-style: none; }
+
+#average-page #average-delay-viz {
+  height: 66%; }
+#average-page .axis PATH, #average-page .axis LINE {
+  fill: none;
+  path: #000;
+  shape-rendering: crispEdges; }
+#average-page .bar {
+  fill: steelBlue; }
+#average-page .x.axis PATH {
+  display: none; }

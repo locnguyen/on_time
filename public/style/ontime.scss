@@ -45,3 +45,27 @@ H3.query-params {
     }
   }
 }
+
+#average-page {
+  #average-delay-viz {
+    height: 66%;
+  }
+
+  .axis {
+    PATH, LINE {
+      fill: none;
+      path: #000;
+      shape-rendering: crispEdges;
+    }
+  }
+
+  .bar {
+    fill: steelBlue;
+  }
+
+  .x {
+    &.axis PATH {
+      display: none;
+    }
+  }
+}
