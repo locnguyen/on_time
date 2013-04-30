@@ -16,7 +16,6 @@ OnTime.init = function(options) {
 
   function init() {
     that.averagePage = new OnTime.AvgForAirlines({ url: api.delays });
-
     console.log('Initialized OnTime page');
   }
 
@@ -35,11 +34,10 @@ OnTime.Indicator = {
     this.$bar.width('0%');
     this.$el.show();
 
-
     var seconds = 5;
 
     var intervalId = setInterval(function() {
-      if (seconds >= 98) {
+      if (seconds === 90) {
         clearInterval(intervalId);
         return;
       }
@@ -55,9 +53,30 @@ OnTime.Indicator = {
   }
 };
 
+OnTime.Alert = {
+  $error: $('#alert'),
+
+  $info: $('#info'),
+
+  error: function(cb) {
+    var e = this.$error,
+      msg = e.find('.msg');
+    msg.empty();
+    e.show();
+    if (cb) cb(msg);
+  },
+
+  info: function(cb) {
+    var i = this.$info,
+      msg = i.find('.msg');
+    msg.empty();
+    i.show();
+    if (cb) cb(msg);
+  }
+};
+
 OnTime.AvgForAirlines = function(options) {
   var $el = $('#average-page'),
-      $viz = $el.find('#average-delay-viz'),
       url = options.url || '',
       data = [],
       chart,
@@ -83,23 +102,27 @@ OnTime.AvgForAirlines = function(options) {
   function loadData(callback) {
     if (url === '') return;
 
-    // url = url + '?airlines=UA';
-
     OnTime.Indicator.start();
 
-    $.get(url, function(response) {
-      DEBUG = response;
-      data = response;
-      if (callback) {
-        callback();
-      }
+    $.ajax({
+      url: url,
+      cache: true
     })
-    .complete(function() {
-        OnTime.Indicator.stop();
-    })
-    .fail(function() {
-      $('#error').show().text('Error while requesting data');
-    });
+      .success(function(response) {
+        DEBUG = response;
+        data = response;
+        if (callback) {
+          callback();
+        }
+      })
+      .complete(function() {
+          OnTime.Indicator.stop();
+      })
+      .fail(function() {
+        OnTime.Alert.error(function($el) {
+          $el.text('Error while requesting data');
+        });
+      });
   }
 
   function init() {

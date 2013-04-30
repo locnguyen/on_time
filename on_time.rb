@@ -26,6 +26,7 @@ class OnTime < Sinatra::Base
   end
 
   before do
+    cache_control :public, max_age: 30
     content_type :json
     @api = API
   end
@@ -84,7 +85,8 @@ class OnTime < Sinatra::Base
     results = Flight.collection.aggregate(pipeline)
     json = results.to_json
     settings.cache.set(request_url, json, ttl = CACHE_EXPIRE)
-    Log.debug results.to_json
-    results.to_json
+
+    Log.debug json
+    json
   end
 end

@@ -1,5 +1,7 @@
 require 'rubygems'
 require 'bundler/setup'
+require 'rack/contrib'
+require './on_time'
 
 Bundler.require
 
@@ -10,7 +12,5 @@ if memcache_servers = ENV['MEMCACHE_SERVERS']
       metastore: "memcached://#{memcache_servers}",
       entitystore: "memcached://#{memcache_servers}"
 end
-
-require './on_time'
 
 run OnTime

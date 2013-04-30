@@ -17,6 +17,8 @@ H3.query-params {
     width: 100%; }
 #alerts #error {
   display: none; }
+#alerts #info {
+  display: none; }
 
 .ontime-page {
   padding: 0 15px; }
