@@ -10,6 +10,7 @@ GEM
     backports (3.3.0)
     builder (3.0.4)
     daemons (1.1.9)
+    dalli (2.6.2)
     eventmachine (1.0.3)
     eventmachine (1.0.3-java)
     i18n (0.6.1)
@@ -23,6 +24,8 @@ GEM
     multi_json (1.7.2)
     origin (1.1.0)
     rack (1.5.2)
+    rack-cache (1.2)
+      rack (>= 0.4)
     rack-protection (1.5.0)
       rack
     rack-test (0.6.2)
@@ -52,8 +55,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  dalli
   logger
   mongoid (~> 3.0.0)
+  rack-cache
   shotgun
   sinatra
   sinatra-contrib

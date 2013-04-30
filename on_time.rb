@@ -1,6 +1,8 @@
 require 'sinatra'
 require 'mongoid'
 require 'logger'
+require 'dalli'
+require 'rack-cache'
 require './flight'
 
 class OnTime < Sinatra::Base
@@ -18,6 +20,9 @@ class OnTime < Sinatra::Base
     Mongoid.logger.level = Logger::DEBUG
     Moped.logger.level = Logger::DEBUG
     Mongoid.load!('mongoid.yml', :development)
+
+    set :cache, Dalli::Client.new
+    cache.flush
   end
 
   before do
@@ -30,6 +35,8 @@ class OnTime < Sinatra::Base
     flights: '/flights',
     delays: '/delays'
   }
+
+  CACHE_EXPIRE = 300.seconds
 
   get '/' do
     Log.debug 'Loading index view'
@@ -45,9 +52,14 @@ class OnTime < Sinatra::Base
     flights.to_json
   end
 
-
   get '/delays' do
-    # db.flights.aggregate({ $group: { _id: "$Carrier", avgDelay: { $avg : "$ArrDelayMinutes" }}})
+    request_url = request.url
+    Log.debug request_url
+    cached_result = settings.cache.get(request_url)
+
+    return cached_result unless cached_result.nil?
+
+    Log.debug 'Did not hit cache'
 
     airline_codes = params['airlines']
     dest_codes = params['destinations']
@@ -70,13 +82,9 @@ class OnTime < Sinatra::Base
     pipeline << { "$group" => { "_id" => "$Carrier", "avg_delay" => { "$avg" => "$ArrDelayMinutes"}}}
 
     results = Flight.collection.aggregate(pipeline)
+    json = results.to_json
+    settings.cache.set(request_url, json, ttl = CACHE_EXPIRE)
     Log.debug results.to_json
     results.to_json
-
-    ## - for faster dev - replace with memcached?
-    #results = %Q{
-    #  [{"_id":"YV","avg_delay":7.251684076930586},{"_id":"VX","avg_delay":12.363816659321287},{"_id":"UA","avg_delay":8.415542946970255},{"_id":"HA","avg_delay":4.774862109309711},{"_id":"FL","avg_delay":5.136833582461385},{"_id":"DL","avg_delay":5.5645155888952145},{"_id":"F9","avg_delay":9.216181643748001},{"_id":"EV","avg_delay":9.715029824414014},{"_id":"US","avg_delay":5.531366106795222},{"_id":"B6","avg_delay":10.755254200659138},{"_id":"OO","avg_delay":9.872369047372668},{"_id":"MQ","avg_delay":8.574229313142238},{"_id":"AS","avg_delay":7.1158835151619275},{"_id":"WN","avg_delay":7.895442778075344},{"_id":"AA","avg_delay":10.90068839358783}]
-    #}
-    #results
   end
 end
