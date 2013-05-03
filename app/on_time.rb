@@ -4,19 +4,20 @@ require 'mongoid'
 require 'logger'
 require 'dalli'
 require 'rack-cache'
-require './flight'
-require './airline'
-require './routes'
+
+current_folder = File.expand_path('../', __FILE__) # get absolute directory
+Dir["#{current_folder}/**/*.rb"].each { |f| require f }
 
 class OnTime < Sinatra::Base
   register Sinatra::ConfigFile
   include Airline
   extend Routes
 
-  configure do
+  config_file '../config/settings.yml'
+
+  configure :development do
     enable :logging, :dump_errors, :raise_errors
 
-    config_file 'settings.yml'
 
     Log = Logger.new('sinatra.log')
     Log.datetime_format = '%Y-%m-%d %H:%M '
@@ -27,7 +28,7 @@ class OnTime < Sinatra::Base
 
     Mongoid.logger.level = Logger::DEBUG
     Moped.logger.level = Logger::DEBUG
-    Mongoid.load!('mongoid.yml', :development)
+    Mongoid.load!('config/mongoid.yml', :development)
 
     set :cache, Dalli::Client.new
     cache.flush

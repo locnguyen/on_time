@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'bundler/setup'
 require 'rack/contrib'
-require './on_time'
+require './app/on_time'
 
 Bundler.require
 
