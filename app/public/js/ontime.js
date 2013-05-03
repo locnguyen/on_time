@@ -16,7 +16,19 @@ OnTime.init = function(options) {
 
   function init() {
     that.averagePage = new OnTime.AvgForAirlines({ url: api.delays });
+
+    $('a').on('click', function() {
+      window.location.hash = this.hash;
+    });
+
+    showFromLocationHash();
+
     console.log('Initialized OnTime page');
+  }
+
+  function showFromLocationHash() {
+    var hash = window.location.hash;
+    hash && $('a[href=' + hash + ']').trigger('click');
   }
 
   init();
