@@ -15,6 +15,8 @@ OnTime.AverageChart = function(options) {
   this.draw = function(dataset) {
     var len = dataset.length;
 
+    var xScale = d3.scale.ordinal().domain(d3.range(dataset));
+
     svg = d3.select(viz)
       .append('svg')
       .attr('width', width())

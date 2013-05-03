@@ -79,11 +79,17 @@
     <script src="/js/ontime.js" type="text/javascript"></script>
     <script src="/js/average_chart.js" type="text/javascript"></script>
     <script type="text/javascript">
-      var API = <%= @api.to_json %>,
+      var api = <%= api.to_json %>,
           app;
 
       $(function() {
-        app = OnTime.init({ api: API });
+
+        if (api === null || api === undefined) {
+          console.log('Could not load the API!');
+          return;
+        }
+
+        app = OnTime.init({ api: api });
       });
     </script>
   </body>

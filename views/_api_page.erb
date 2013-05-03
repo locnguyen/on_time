@@ -2,10 +2,39 @@
   <h1 class="page-title">REST Resources</h1>
 
   <ul class="endpoints accordion" id="endpoints-list">
+
+    <li class="accordion-group endpoint">
+      <h2 class="endpoint accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#endpoints-list" href="#api">
+          <%= api[:root] %>
+        </a>
+      </h2>
+
+      <div id="api" class="accordion-body collapse">
+        <div class="accordion-inner">
+          <p><span class="label label-info">GET</span> a list of API endpoints.</p>
+        </div>
+      </div>
+    </li>
+
+    <li class="accordion-group endpoint">
+      <h2 class="endpoint accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#endpoints-list" href="#airlines">
+          <%= api[:airlines] %>
+        </a>
+      </h2>
+
+      <div id="airlines" class="accordion-body collapse">
+        <div class="accordion-inner">
+          <p><span class="label label-info">GET</span> a list of airlines.</p>
+        </div>
+      </div>
+    </li>
+
     <li class="accordion-group endpoint">
       <h2 class="endpoint accordion-heading">
         <a class="accordion-toggle" data-toggle="collapse" data-parent="#endpoints-list" href="#flights">
-          <%= @api[:flights] %>
+          <%= api[:flights] %>
         </a>
       </h2>
 
@@ -23,7 +52,7 @@
     <li class="accordion-group endpoint">
       <h2 class="endpoint accordion-heading">
         <a class="accordion-toggle" data-toggle="collapse" data-parent="#endpoints-list" href="#delays">
-          <%= @api[:delays] %>
+          <%= api[:delays] %>
         </a>
       </h2>
 
