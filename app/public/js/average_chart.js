@@ -8,14 +8,15 @@ OnTime.AverageChart = function(options) {
   var viz = options.vizSelector,
       $el = $(viz),
       margins = options.margins || { top: 20, right: 20, bottom: 30, left: 40 },
-      padding = options.padding || 5,
       svg;
 
 
   this.draw = function(dataset) {
-    var len = dataset.length;
 
-    var xScale = d3.scale.ordinal().domain(d3.range(dataset));
+    var xLabels = dataset.map(function(d) {
+      return d._id;
+    }),
+    xScale = d3.scale.ordinal().domain(xLabels).rangeRoundBands([0 , width()], .1);
 
     svg = d3.select(viz)
       .append('svg')
@@ -27,15 +28,15 @@ OnTime.AverageChart = function(options) {
       .enter()
       .append('rect')
       .attr('x', function(d, i) {
-        return i * (width() / len);
+        return xScale(i);
       })
       .attr('y', function(d) {
         return height() - d.avg_delay * 10;
       })
       .attr('width', function() {
-        return width() / len - padding  ;
+        return xScale.rangeBand();
       })
-      .attr('height', function(d, i) {
+      .attr('height', function(d) {
         return 10 * d.avg_delay;
       })
       .attr('class', 'bar');
@@ -45,10 +46,10 @@ OnTime.AverageChart = function(options) {
       .enter()
       .append('text')
       .attr('x', function(d, i) {
-        return i * (width() / len);
+        return xScale(i) + (xScale.rangeBand() / 3);
       })
       .attr('y', function(d) {
-        return height() - d.avg_delay * 10 + 15;
+        return height() - (10 * d.avg_delay) + 20;
       })
       .text(function(d) {
         return d._id;
@@ -56,7 +57,7 @@ OnTime.AverageChart = function(options) {
   }
 
   function init() {
-
+    console.log('OnTime.AverageChart initialized');
   }
 
   function width() {
