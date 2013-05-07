@@ -19,6 +19,7 @@ if [ ${#memcache_process} -gt 0 ]
 then
   echo 'memcached is already running!'
 else
+  echo 'Starting memcached...'
   memcached -d -l 127.0.0.1 -p 11211
 fi
 
