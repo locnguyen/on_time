@@ -4,8 +4,18 @@ var OnTime = OnTime || {};
 
 var Util = Util || {};
 
-Util.hashVal = function() {
-  return location.hash;
+OnTime._airlines = undefined;
+
+OnTime.airlines = function(cb) {
+  if (OnTime._airlines === undefined) {
+    $.get(api.airlines, function(response) {
+      OnTime._airlines = response;
+      if (cb) cb(OnTime._airlines);
+    });
+  }
+  else {
+    return OnTime._airlines;
+  }
 }
 
 OnTime.init = function(options) {
@@ -15,6 +25,8 @@ OnTime.init = function(options) {
   this.averagePage = undefined;
 
   function init() {
+    console.log('Hello, human. Loc is a cool guy. I think you\'ll like him!');
+
     that.averagePage = new OnTime.AvgForAirlines({ url: api.delays });
 
     $('a').on('click', function() {
@@ -22,7 +34,6 @@ OnTime.init = function(options) {
     });
 
     showFromLocationHash();
-
     console.log('Initialized OnTime page');
   }
 
@@ -141,6 +152,23 @@ OnTime.AvgForAirlines = function(options) {
     $('a[href=#average-page]').click(function() {
       that.show();
     });
+
+
+    OnTime.airlines(function(airlines) {
+      var $legendTbody = $('#legend tbody');
+      $legendTbody.empty();
+      for (var a in airlines) {
+        var row = $('<tr></tr>'),
+          code = $('<td></td>').text(a),
+          airline = $('<td></td>').text(airlines[a]);
+
+        row.append(code);
+        row.append(airline);
+        $legendTbody.append(row);
+      }
+    });
+
+
 
     chart = new OnTime.AverageChart({
       vizSelector: '#average-delay-viz'
